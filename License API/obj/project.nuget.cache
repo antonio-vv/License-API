@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "dgSpecHash": "VtS5S3HKzQLCsR7PTkkTfK3HojGC0w8N9EILuWd4vnQabVpxIPeeH6625pDYo/6cQUe+Ie7RsdFIVzHAHgDLtw==",
+  "success": false,
+  "projectFilePath": "C:\\Users\\Usuario\\Desktop\\Terraform\\License REST\\License API\\License API\\License API.csproj",
+  "expectedPackageFiles": [],
+  "logs": [
+    {
+      "code": "NU1101",
+      "level": "Error",
+      "message": "No se encuentra el paquete Swashbuckle.AspNetCore. No existe ningún paquete con este id. en los orígenes: Microsoft Visual Studio Offline Packages",
+      "libraryId": "Swashbuckle.AspNetCore",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
+}
