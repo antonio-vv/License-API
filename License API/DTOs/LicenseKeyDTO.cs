@@ -1,6 +1,6 @@
-﻿namespace License_API.Entities
+﻿namespace License_API.DTOs
 {
-    public record LicenseKey
+    public class LicenseKeyDTO
     {
         public Guid Id { get; init; }
 

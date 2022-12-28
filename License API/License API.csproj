@@ -10,6 +10,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.OpenApi" Version="1.4.5" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
-
 </Project>

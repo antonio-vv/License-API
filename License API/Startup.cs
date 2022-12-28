@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using License_API.Repos;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,7 @@ namespace License_API
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton<IKeysInMem, KeysInMem>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
