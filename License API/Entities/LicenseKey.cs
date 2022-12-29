@@ -9,5 +9,7 @@
         public string Category { get; init; }
 
         public DateTimeOffset Expiration { get; init; }
+
+        public string Org_ID { get; init; }
     }
 }

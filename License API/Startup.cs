@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using MySql.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
+using License_API.Settings;
 
 namespace License_API
 {
@@ -20,7 +23,12 @@ namespace License_API
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<IKeysInMem, KeysInMem>();
+            services.AddSingleton<MySqlConnection>(ServiceProvider =>
+            {
+                var settings = Configuration.GetSection(nameof(MySQLSettings)).Get<MySQLSettings>();
+                return new MySqlConnection(settings.Connection);
+            });
+            services.AddSingleton<IKeysInMem, KeysInMySql>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

@@ -25,12 +25,7 @@ namespace License_API.Repos
 
         public void CreateKey(LicenseKey key)
         {
-            SqlConnection SQLConn = Connection.SQLCon;
-            SQLConn.Open();
-            string query = "INSERT INTO licenses VALUES()";
-
-
-            SQLConn.Close();
+            //string query = "INSERT INTO licenses VALUES()";
         }
 
         public void UpdateKey(LicenseKey key)
