@@ -1,14 +1,8 @@
 ﻿using License_API.Repos;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
-using MySql.EntityFrameworkCore;
 using MySql.Data.MySqlClient;
 using License_API.Settings;
+using License_API.Interfaces;
 
 namespace License_API
 {
@@ -26,9 +20,13 @@ namespace License_API
             services.AddSingleton<MySqlConnection>(ServiceProvider =>
             {
                 var settings = Configuration.GetSection(nameof(MySQLSettings)).Get<MySQLSettings>();
-                return new MySqlConnection(settings.Connection);
+                MySqlConnection sqlconn = new(settings.Connection);
+                sqlconn.Open();
+                return sqlconn;
             });
-            services.AddSingleton<IKeysInMem, KeysInMySql>();
+            services.AddSingleton<InterfLicenses, LicensesInMySql>();
+            services.AddSingleton<InterfOrganizations, OrganizationsInMySql>();
+            services.AddSingleton<InterfServers, ServersInMySql>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

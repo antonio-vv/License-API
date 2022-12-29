@@ -18,7 +18,7 @@ namespace License_API.Settings
         {
             get
             {
-                return @"server = " + Host + "; database=" + DataBase + "; user=" + User + "; password=" + Password + "";
+                return "server = " + Host + "; database=" + DataBase + "; user=" + User + "; password=" + Password + "";
             }
         }
     }

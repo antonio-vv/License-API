@@ -1,28 +1,19 @@
 ﻿using License_API.DTOs;
 using License_API.Entities;
-using License_API.Repos;
+using License_API.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace License_API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class LicenseKeyController : Controller
+    public class LicenseController : Controller
     {
-        private readonly IKeysInMem repo;
+        private readonly InterfLicenses repo;
 
-        public LicenseKeyController(IKeysInMem repo)
+        public LicenseController(InterfLicenses repo)
         {
             this.repo = repo;
-        }
-
-        // GET /LicenseKey
-        [HttpGet]
-        public IEnumerable<LicenseKeyDTO> GetLicenses()
-        {
-            var lks = repo.GetKeys().Select(lic => lic.AsDTO());
-
-            return lks;
         }
 
         // GET /LicenseKey/{id}
@@ -50,15 +41,16 @@ namespace License_API.Controllers
                 Creation = DateTimeOffset.UtcNow,
                 Category = nkDTO.Category,
                 Expiration = DateTimeOffset.UtcNow.AddMonths(12),
+                Org_ID = nkDTO.Org_ID,
             };
             
             repo.CreateKey(lk);
             return CreatedAtAction(nameof(GetKey), new { id = lk.Id }, lk.AsDTO());
         }
 
-        // PUT /LicenseKey/{id}
-        [HttpPut("{id}")]
-        public ActionResult<LicenseKeyDTO> UpdateKey(Guid id, UpdateKeyDTO ukDTO)
+        // PUT /LicenseKey/{id}/Upgrade
+        [HttpPut("{id}/Upgrade")]
+        public ActionResult<LicenseKeyDTO> UpgradeKey(Guid id, UpgradeKeyDTO ukDTO)
         {
             var exKey = repo.GetKey(id);
             if (exKey is null)
@@ -69,10 +61,28 @@ namespace License_API.Controllers
             LicenseKey upKey = exKey with
             {
                 Category = ukDTO.Category,
-                Expiration = DateTimeOffset.UtcNow.AddMonths(12),
             };
 
-            repo.UpdateKey(upKey);
+            repo.UpgradeKey(upKey);
+            return NoContent();
+        }
+
+        // PUT /LicenseKey/{id}/Renewal
+        [HttpPut("{id}/Renewal")]
+        public ActionResult<LicenseKeyDTO> RenewKey(Guid id, RenewKeyDTO rkDTO)
+        {
+            var exKey = repo.GetKey(id);
+            if (exKey is null)
+            {
+                return NotFound();
+            }
+
+            LicenseKey reKey = exKey with
+            {
+                Expiration = rkDTO.Expiration,
+            };
+
+            repo.RenewKey(reKey);
             return NoContent();
         }
     }
