@@ -1,6 +1,6 @@
 ﻿namespace License_API.Entities
 {
-    public class Organizations
+    public record Organizations
     {
         public string OrgID { get; init; }
 

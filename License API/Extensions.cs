@@ -5,14 +5,19 @@ namespace License_API
 {
     public static class Extensions
     {
-        public static LicenseKeyDTO AsDTO(this LicenseKey lic_key)
+        public static LicenseKeyDTO AsDTO(this Licenses lic_key)
         {
             return new LicenseKeyDTO
             {
-                Id = lic_key.Id,
+                Key = lic_key.Key,
                 Creation = lic_key.Creation,
                 Category = lic_key.Category,
                 Expiration = lic_key.Expiration,
+                CreateOps = lic_key.CreateOps,
+                UpdateOps = lic_key.UpdateOps,
+                AddOps = lic_key.AddOps,
+                DeleteOps = lic_key.DeleteOps,
+                Server = lic_key.Server,
                 Org_ID = lic_key.Org_ID,
             };
         }
@@ -28,16 +33,15 @@ namespace License_API
             };
         }
 
-        public static ServersDTO AsDTO(this Server srvr)
+        public static CategoriesDTO AsDTO(this Categories cat)
         {
-            return new ServersDTO
+            return new CategoriesDTO
             {
-                ServID = srvr.ServID,
-                CreateOps = srvr.CreateOps,
-                UpdateOps = srvr.UpdateOps,
-                AddOps = srvr.AddOps,
-                DeleteOps = srvr.DeleteOps,
-                Lic_Key = srvr.Lic_Key,
+                Name = cat.Name,
+                Creations = cat.Creations,
+                Updates = cat.Updates,
+                Additions = cat.Additions,
+                Deletions = cat.Deletions,
             };
         }
     }

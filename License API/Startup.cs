@@ -24,9 +24,9 @@ namespace License_API
                 sqlconn.Open();
                 return sqlconn;
             });
+            services.AddSingleton<InterfCategories, CategoriesInMySql>();
             services.AddSingleton<InterfLicenses, LicensesInMySql>();
             services.AddSingleton<InterfOrganizations, OrganizationsInMySql>();
-            services.AddSingleton<InterfServers, ServersInMySql>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {

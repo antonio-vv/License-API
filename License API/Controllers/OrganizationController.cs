@@ -44,7 +44,7 @@ namespace License_API.Controllers
             };
 
             repo.CreateOrg(org);
-            return CreatedAtAction(nameof(GetOrg), new { OrgID = org.OrgID }, org.AsDTO());
+            return CreatedAtAction(nameof(GetOrg), new { id = org.OrgID }, org.AsDTO());
         }
     }
 }

@@ -35,9 +35,9 @@ namespace License_API.Controllers
         [HttpPost]
         public ActionResult<LicenseKeyDTO> CreateKey(NewKeyDTO nkDTO)
         {
-            LicenseKey lk = new()
+            Licenses lk = new()
             {
-                Id = Guid.NewGuid(),
+                Key = Guid.NewGuid(),
                 Creation = DateTimeOffset.UtcNow,
                 Category = nkDTO.Category,
                 Expiration = DateTimeOffset.UtcNow.AddMonths(12),
@@ -45,7 +45,7 @@ namespace License_API.Controllers
             };
             
             repo.CreateKey(lk);
-            return CreatedAtAction(nameof(GetKey), new { id = lk.Id }, lk.AsDTO());
+            return CreatedAtAction(nameof(GetKey), new { id = lk.Key }, lk.AsDTO());
         }
 
         // PUT /LicenseKey/{id}/Upgrade
@@ -58,7 +58,7 @@ namespace License_API.Controllers
                 return NotFound();
             }
 
-            LicenseKey upKey = exKey with
+            Licenses upKey = exKey with
             {
                 Category = ukDTO.Category,
             };
@@ -77,7 +77,7 @@ namespace License_API.Controllers
                 return NotFound();
             }
 
-            LicenseKey reKey = exKey with
+            Licenses reKey = exKey with
             {
                 Expiration = rkDTO.Expiration,
             };

@@ -2,7 +2,7 @@
 
 namespace License_API.DTOs
 {
-    public class OrganizationsDTO
+    public record OrganizationsDTO
     {
         public string OrgID { get; init; }
 

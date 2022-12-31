@@ -4,12 +4,24 @@ namespace License_API.Interfaces
 {
     public interface InterfLicenses
     {
-        LicenseKey GetKey(Guid id);
+        Licenses GetKey(Guid id);
 
-        void CreateKey(LicenseKey licenseKey);
+        void CreateKey(Licenses licenseKey);
 
-        void UpgradeKey(LicenseKey licenseKey);
+        void UpgradeKey(Licenses licenseKey);
 
-        void RenewKey(LicenseKey licenseKey);
+        void RenewKey(Licenses licenseKey);
+
+        void CreateCount(Licenses licenseKey);
+        
+        void UpdateCount(Licenses licenseKey);
+
+        void AddCount(Licenses licenseKey);
+
+        void DeleteCount(Licenses licenseKey);
+
+        void BindServer(Licenses licenseKey);
+
+        void UnbindServer(Licenses licenseKey);
     }
 }

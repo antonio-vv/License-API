@@ -10,8 +10,6 @@
 
         public string Password { get; set; }
 
-        public string Port { get; set; }
-
         public string Connection
         {
             get

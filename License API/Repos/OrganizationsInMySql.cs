@@ -1,5 +1,6 @@
 ﻿using License_API.Entities;
 using License_API.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using MySql.Data.MySqlClient;
 using System.Data;
 
@@ -16,7 +17,7 @@ namespace License_API.Repos
 
         public void CreateOrg(Organizations org)
         {
-            string query = "INSERT INTO organizations VALUES('" + org.OrgID.ToString().Trim() + "', '" + org.Organization.Trim() + "', '" +
+            string query = "INSERT INTO organization VALUES('" + org.OrgID.ToString().Trim() + "', '" + org.Organization.Trim() + "', '" +
                 org.RUC.Trim() + "', '" + org.ZipCode.Trim() + "');";
             MySqlCommand cmm = new(query, mySQLConn);
             cmm.ExecuteNonQuery();
@@ -24,9 +25,8 @@ namespace License_API.Repos
 
         public Organizations GetOrg(string id)
         {
-            string query = "SELECT * FROM organizations WHERE OrgID = '" + id.Trim() + "';";
-            MySqlCommand cmm = new(query, mySQLConn);
-            MySqlDataAdapter adp = new(cmm);
+            string query = "SELECT * FROM organization WHERE ID = '" + id.Trim() + "';";
+            MySqlDataAdapter adp = new(query, mySQLConn);
             DataTable dt = new();
             adp.Fill(dt);
 
