@@ -4,7 +4,7 @@ namespace License_API.Interfaces
 {
     public interface InterfOrganizations
     {
-        Organizations GetOrg(Guid id);
+        Organizations GetOrg(string id);
 
         void CreateOrg(Organizations org);
     }

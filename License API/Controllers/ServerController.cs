@@ -1,7 +1,6 @@
 ﻿using License_API.DTOs;
 using License_API.Entities;
 using License_API.Interfaces;
-using License_API.Repos;
 using Microsoft.AspNetCore.Mvc;
 
 namespace License_API.Controllers
@@ -21,7 +20,7 @@ namespace License_API.Controllers
 
         // GET /Server/{id}
         [HttpGet("{id}")]
-        public ActionResult<ServersDTO> GetServer(Guid id)
+        public ActionResult<ServersDTO> GetServer(string id)
         {
             var srvr = repo.GetServer(id);
             if (srvr is null)
@@ -38,7 +37,7 @@ namespace License_API.Controllers
         [HttpPost]
         public ActionResult<NewSrvrDTO> RegisterServer(NewSrvrDTO nsDTO)
         {
-            LicenseKey lk = repoLic.GetKey(new Guid(nsDTO.Lic_Key));
+            LicenseKey lk = repoLic.GetKey(nsDTO.Lic_Key);
             int creation;
             int update;
             int add;
@@ -71,12 +70,12 @@ namespace License_API.Controllers
             };
 
             repo.RegisterServer(srvr);
-            return CreatedAtAction(nameof(GetServer), new { ServID = srvr.ServID }, srvr.AsDTO());
+            return CreatedAtAction(nameof(GetServer), new { id = srvr.ServID }, srvr.AsDTO());
         }
 
         // PUT /Server/{id}/License
         [HttpPut("{id}/License")]
-        public ActionResult<LicenseSrvrDTO> LicenseServer(Guid id, LicenseSrvrDTO lsDTO)
+        public ActionResult<LicenseSrvrDTO> LicenseServer(string id, LicenseSrvrDTO lsDTO)
         {
             var exSrvr = repo.GetServer(id);
             if (exSrvr is null)
@@ -84,8 +83,13 @@ namespace License_API.Controllers
                 return NotFound();
             }
 
-            Server LicSrvr = exSrvr with
+            Server LicSrvr = new()
             {
+                ServID = exSrvr.ServID,
+                CreateOps = exSrvr.CreateOps,
+                UpdateOps = exSrvr.UpdateOps,
+                AddOps = exSrvr.AddOps,
+                DeleteOps = exSrvr.DeleteOps,
                 Lic_Key = lsDTO.Lic_Key,
             };
 
@@ -95,7 +99,7 @@ namespace License_API.Controllers
 
         // PUT /Server/{id}/Unlicense
         [HttpPut("{id}/Unlicense")]
-        public ActionResult<LicenseSrvrDTO> UnlicenseServer(Guid id)
+        public ActionResult<LicenseSrvrDTO> UnlicenseServer(string id)
         {
             var exSrvr = repo.GetServer(id);
             if (exSrvr is null)
@@ -104,6 +108,62 @@ namespace License_API.Controllers
             }
 
             repo.UnlicenseServer(exSrvr);
+            return NoContent();
+        }
+
+        // PUT /Server/{id}/CreateOps
+        [HttpPut("{id}/CreateOps")]
+        public ActionResult<LicenseSrvrDTO> CreateCount(string id)
+        {
+            var exSrvr = repo.GetServer(id);
+            if (exSrvr is null)
+            {
+                return NotFound();
+            }
+
+            repo.CreateCount(exSrvr);
+            return NoContent();
+        }
+
+        // PUT /Server/{id}/UpdateOps
+        [HttpPut("{id}/UpdateOps")]
+        public ActionResult<LicenseSrvrDTO> UpdateCount(string id)
+        {
+            var exSrvr = repo.GetServer(id);
+            if (exSrvr is null)
+            {
+                return NotFound();
+            }
+
+            repo.UpdateCount(exSrvr);
+            return NoContent();
+        }
+
+        // PUT /Server/{id}/AddOps
+        [HttpPut("{id}/AddOps")]
+        public ActionResult<LicenseSrvrDTO> AddCount(string id)
+        {
+            var exSrvr = repo.GetServer(id);
+            if (exSrvr is null)
+            {
+                return NotFound();
+            }
+
+            repo.AddCount(exSrvr);
+            return NoContent();
+        }
+
+        // PUT /Server/{id}/DeleteOps
+        [HttpPut("{id}/DeleteOps")]
+        public ActionResult<LicenseSrvrDTO> DeleteCount(string id)
+        {
+            var exSrvr = repo.GetServer(id);
+            if (exSrvr is null)
+            {
+                return NotFound();
+            }
+
+            repo.DeleteCount(exSrvr);
             return NoContent();
         }
     }

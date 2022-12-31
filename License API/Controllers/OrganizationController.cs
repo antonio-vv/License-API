@@ -18,7 +18,7 @@ namespace License_API.Controllers
 
         // GET /Organizations/{id}
         [HttpGet("{id}")]
-        public ActionResult<OrganizationsDTO> GetOrg(Guid id)
+        public ActionResult<OrganizationsDTO> GetOrg(string id)
         {
             var org = repo.GetOrg(id);
             if (org is null)
@@ -37,7 +37,7 @@ namespace License_API.Controllers
         {
             Organizations org = new()
             {
-                OrgID = Guid.NewGuid(),
+                OrgID = noDTO.ZipCode + "-" + noDTO.RUC,
                 Organization = noDTO.Organization,
                 RUC = noDTO.RUC,
                 ZipCode= noDTO.ZipCode,

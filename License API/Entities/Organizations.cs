@@ -2,7 +2,7 @@
 {
     public class Organizations
     {
-        public Guid OrgID { get; init; }
+        public string OrgID { get; init; }
 
         public string Organization { get; init; }
 

@@ -4,7 +4,7 @@ namespace License_API.Interfaces
 {
     public interface InterfServers
     {
-        Server GetServer(Guid id);
+        Server GetServer(string id);
 
         void RegisterServer(Server srvr);
 

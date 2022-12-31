@@ -2,7 +2,7 @@
 {
     public class Server
     {
-        public Guid ServID { get; init; }
+        public string ServID { get; init; }
 
         public int CreateOps { get; init; }
 
@@ -12,6 +12,6 @@
         
         public int DeleteOps { get; init; }
         
-        public string Lic_Key { get; init; }
+        public Guid? Lic_Key { get; init; }
     }
 }

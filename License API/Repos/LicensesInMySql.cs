@@ -1,7 +1,6 @@
 ﻿using License_API.Entities;
 using License_API.Interfaces;
 using MySql.Data.MySqlClient;
-using MySql.EntityFrameworkCore;
 using System.Data;
 
 namespace License_API.Repos
@@ -17,8 +16,9 @@ namespace License_API.Repos
         
         public void CreateKey(LicenseKey licenseKey)
         {
-            string query = "INSERT INTO licenses VALUES('" + licenseKey.Id.ToString().Trim() + "', '" + licenseKey.Creation.DateTime + "', '" +
-                licenseKey.Category.Trim() + "', '" + licenseKey.Expiration.DateTime + "', '" + licenseKey.Org_ID.Trim() + "');";
+            string query = "INSERT INTO licenses VALUES('" + licenseKey.Id.ToString().Trim() + "', '" + 
+                licenseKey.Creation.DateTime.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + licenseKey.Category.Trim() + "', '" + 
+                licenseKey.Expiration.DateTime.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + licenseKey.Org_ID.Trim() + "');";
             MySqlCommand cmm = new(query, mySQLConn);
             cmm.ExecuteNonQuery();
         }
@@ -50,7 +50,8 @@ namespace License_API.Repos
 
         public void RenewKey(LicenseKey licenseKey)
         {
-            string query = "UPDATE licenses SET Expiration = '" + licenseKey.Expiration+ "' WHERE LicKey = '" + licenseKey.Id.ToString().Trim() + "';";
+            string query = "UPDATE licenses SET Expiration = '" + licenseKey.Expiration.DateTime.ToString("yyyy-MM-dd HH:mm:ss") + 
+                "' WHERE LicKey = '" + licenseKey.Id.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
             cmm.ExecuteNonQuery();
         }

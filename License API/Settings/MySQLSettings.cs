@@ -1,6 +1,4 @@
-﻿using System.Globalization;
-
-namespace License_API.Settings
+﻿namespace License_API.Settings
 {
     public class MySQLSettings
     {

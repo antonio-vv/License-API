@@ -35,7 +35,7 @@ namespace License_API.Repos
             cmm.ExecuteNonQuery();
         }
 
-        public Server GetServer(Guid id)
+        public Server GetServer(string id)
         {
             string query = "SELECT * FROM organizations WHERE OrgID = '" + id.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
@@ -45,18 +45,18 @@ namespace License_API.Repos
 
             return new Server
             {
-                ServID = new Guid(dt.Rows[0][0].ToString().Trim()),
+                ServID = dt.Rows[0][0].ToString().Trim(),
                 CreateOps = Convert.ToInt32(dt.Rows[0][1].ToString()),
                 UpdateOps = Convert.ToInt32(dt.Rows[0][2].ToString().Trim()),
                 AddOps = Convert.ToInt32(dt.Rows[0][3].ToString().Trim()),
                 DeleteOps = Convert.ToInt32(dt.Rows[0][4].ToString().Trim()),
-                Lic_Key = dt.Rows[0][5].ToString().Trim(),
+                Lic_Key = new Guid(dt.Rows[0][5].ToString().Trim()),
             };
         }
 
         public void LicenseServer(Server srvr)
         {
-            string query = "UPDATE severs SET Lic_Key = '" + srvr.Lic_Key.Trim() + "' WHERE ServerID = '" + srvr.ServID.ToString().Trim() + "';";
+            string query = "UPDATE severs SET Lic_Key = '" + srvr.Lic_Key.ToString().Trim() + "' WHERE ServerID = '" + srvr.ServID.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
             cmm.ExecuteNonQuery();
         }

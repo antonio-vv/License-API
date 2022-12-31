@@ -22,9 +22,9 @@ namespace License_API.Repos
             cmm.ExecuteNonQuery();
         }
 
-        public Organizations GetOrg(Guid id)
+        public Organizations GetOrg(string id)
         {
-            string query = "SELECT * FROM organizations WHERE OrgID = '" + id.ToString().Trim() + "';";
+            string query = "SELECT * FROM organizations WHERE OrgID = '" + id.Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
             MySqlDataAdapter adp = new(cmm);
             DataTable dt = new();
@@ -32,7 +32,7 @@ namespace License_API.Repos
 
             return new Organizations
             {
-                OrgID = new Guid(dt.Rows[0][0].ToString().Trim()),
+                OrgID = dt.Rows[0][0].ToString().Trim(),
                 Organization = dt.Rows[0][1].ToString().Trim(),
                 RUC = dt.Rows[0][2].ToString().Trim(),
                 ZipCode = dt.Rows[0][3].ToString().Trim(),
