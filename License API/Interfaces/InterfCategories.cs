@@ -9,5 +9,7 @@ namespace License_API.Interfaces
         void CreateCat(Categories cat);
 
         void UpdateCat(Categories cat);
+        
+        IEnumerable<Categories> GetCats();
     }
 }

@@ -6,6 +6,8 @@ namespace License_API.Interfaces
     {
         Licenses GetKey(Guid id);
 
+        IEnumerable<Licenses> GetOrgLics(string org_id);
+
         void CreateKey(Licenses licenseKey);
 
         void UpgradeKey(Licenses licenseKey);

@@ -10,10 +10,12 @@ namespace License_API.Controllers
     public class OrganizationController : Controller
     {
         private readonly InterfOrganizations repo;
+        private readonly InterfLicenses repoLic;
 
-        public OrganizationController(InterfOrganizations repo)
+        public OrganizationController(InterfOrganizations repo, InterfLicenses repoLic)
         {
             this.repo = repo;
+            this.repoLic = repoLic;
         }
 
         // GET /Organizations/{id}
@@ -45,6 +47,14 @@ namespace License_API.Controllers
 
             repo.CreateOrg(org);
             return CreatedAtAction(nameof(GetOrg), new { id = org.OrgID }, org.AsDTO());
+        }
+
+        // GET /Organizations/{id}/Licenses
+        [HttpGet("{id}/Licenses")]
+        public IEnumerable<Licenses> GetOrgLics(string id)
+        {
+            var lics = repoLic.GetOrgLics(id);
+            return lics;
         }
     }
 }

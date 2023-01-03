@@ -30,6 +30,8 @@ namespace License_API.DTOs
         [Required]
         public string Category { get; init; }
 
+        public string? Server { get; init; }
+
         [Required]
         public string Org_ID { get; init; }
     }
@@ -44,5 +46,11 @@ namespace License_API.DTOs
     {
         [Required]
         public DateTimeOffset Expiration { get; init; }
+    }
+
+    public record BindKeyDTO
+    {
+        [Required]
+        public string Server { get; init; }
     }
 }

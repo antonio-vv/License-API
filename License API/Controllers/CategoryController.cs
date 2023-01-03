@@ -16,6 +16,14 @@ namespace License_API.Controllers
             this.repo = repo;
         }
 
+        // GET /Category
+        [HttpGet]
+        public IEnumerable<Categories> GetCats()
+        {
+            var cats = repo.GetCats();
+            return cats;
+        }
+
         // GET /Category/{name}
         [HttpGet("{name}")]
         public ActionResult<CategoriesDTO> GetCat(string name)
