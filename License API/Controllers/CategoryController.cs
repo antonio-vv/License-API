@@ -52,8 +52,15 @@ namespace License_API.Controllers
                 Deletions = ncDTO.Deletions,
             };
 
-            repo.CreateCat(cat);
-            return CreatedAtAction(nameof(GetCat), new { name = cat.Name }, cat.AsDTO());
+            if (repo.CreateCat(cat))
+            {
+                return CreatedAtAction(nameof(GetCat), new { name = cat.Name }, cat.AsDTO());
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
         }
 
         // PUT /Category/{name}
@@ -74,8 +81,14 @@ namespace License_API.Controllers
                 Deletions = ncDTO.Deletions,
             };
 
-            repo.UpdateCat(cat);
-            return NoContent();
+            if (repo.UpdateCat(cat))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

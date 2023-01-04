@@ -11,11 +11,13 @@ namespace License_API.Controllers
     {
         private readonly InterfLicenses repo;
         private readonly InterfCategories repoCat;
+        private readonly InterfOrganizations repoOrg;
 
-        public LicenseController(InterfLicenses repo, InterfCategories repoCat)
+        public LicenseController(InterfLicenses repo, InterfCategories repoCat, InterfOrganizations repoOrg)
         {
             this.repo = repo;
             this.repoCat = repoCat;
+            this.repoOrg = repoOrg;
         }
 
         // GET /License/{id}
@@ -38,23 +40,36 @@ namespace License_API.Controllers
         public ActionResult<LicenseKeyDTO> CreateKey(NewKeyDTO nkDTO)
         {
             Categories cat = repoCat.GetCat(nkDTO.Category);
-
-            Licenses lk = new()
+            Organizations org = repoOrg.GetOrg(nkDTO.Org_ID);
+            if (cat is null | org is null)
             {
-                Key = Guid.NewGuid(),
-                Creation = DateTimeOffset.UtcNow,
-                Category = nkDTO.Category,
-                Expiration = DateTimeOffset.UtcNow.AddMonths(12),
-                CreateOps = cat.Creations,
-                UpdateOps = cat.Updates,
-                AddOps = cat.Additions,
-                DeleteOps = cat.Deletions,
-                Server = nkDTO.Server,
-                Org_ID = nkDTO.Org_ID,
-            };
-            
-            repo.CreateKey(lk);
-            return CreatedAtAction(nameof(GetKey), new { id = lk.Key }, lk.AsDTO());
+                return BadRequest();
+            }
+            else
+            {
+                Licenses lk = new()
+                {
+                    Key = Guid.NewGuid(),
+                    Creation = DateTimeOffset.UtcNow,
+                    Category = nkDTO.Category,
+                    Expiration = DateTimeOffset.UtcNow.AddMonths(12),
+                    CreateOps = cat.Creations,
+                    UpdateOps = cat.Updates,
+                    AddOps = cat.Additions,
+                    DeleteOps = cat.Deletions,
+                    Server = nkDTO.Server,
+                    Org_ID = nkDTO.Org_ID,
+                };
+
+                if (repo.CreateKey(lk))
+                {
+                    return CreatedAtAction(nameof(GetKey), new { id = lk.Key }, lk.AsDTO());
+                }
+                else
+                {
+                    return BadRequest();
+                }                
+            }
         }
 
         // PUT /License/{id}/Upgrade
@@ -67,13 +82,27 @@ namespace License_API.Controllers
                 return NotFound();
             }
 
-            Licenses upKey = exKey with
+            if (repoCat.GetCat(ukDTO.Category) is null)
             {
-                Category = ukDTO.Category,
-            };
+                return BadRequest();
+            }
+            else
+            {
+                Licenses upKey = exKey with
+                {
+                    Category = ukDTO.Category,
+                };
 
-            repo.UpgradeKey(upKey);
-            return NoContent();
+                if (repo.UpgradeKey(upKey))
+                {
+                    return NoContent();
+                }
+                else
+                {
+                    return BadRequest();
+                }
+            }
+            
         }
 
         // PUT /License/{id}/Renewal
@@ -91,8 +120,14 @@ namespace License_API.Controllers
                 Expiration = rkDTO.Expiration,
             };
 
-            repo.RenewKey(reKey);
-            return NoContent();
+            if (repo.RenewKey(reKey))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         // PUT /License/{id}/Creation
@@ -105,8 +140,15 @@ namespace License_API.Controllers
                 return NotFound();
             }
 
-            repo.CreateCount(exKey);
-            return NoContent();
+            if (repo.CreateCount(exKey))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
         }
 
         // PUT /License/{id}/Update
@@ -119,8 +161,14 @@ namespace License_API.Controllers
                 return NotFound();
             }
             
-            repo.UpdateCount(exKey);
-            return NoContent();
+            if (repo.UpdateCount(exKey))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         // PUT /License/{id}/Addition
@@ -133,8 +181,14 @@ namespace License_API.Controllers
                 return NotFound();
             }
 
-            repo.AddCount(exKey);
-            return NoContent();
+            if (repo.AddCount(exKey))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         // PUT /License/{id}/Deletion
@@ -147,8 +201,14 @@ namespace License_API.Controllers
                 return NotFound();
             }
 
-            repo.DeleteCount(exKey);
-            return NoContent();
+            if (repo.DeleteCount(exKey))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         // PUT /License/{id}/Bind
@@ -166,8 +226,14 @@ namespace License_API.Controllers
                 Server = bkDTO.Server,
             };
 
-            repo.RenewKey(reKey);
-            return NoContent();
+            if (repo.BindServer(reKey))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         // PUT /License/{id}/Unbind
@@ -180,8 +246,14 @@ namespace License_API.Controllers
                 return NotFound();
             }
 
-            repo.UnbindServer(exKey);
-            return NoContent();
+            if (repo.UnbindServer(exKey))
+            {
+                return NoContent();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
     }
 }

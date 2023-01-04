@@ -29,7 +29,7 @@ namespace License_API
                 OrgID = org.OrgID,
                 Organization = org.Organization,
                 RUC = org.RUC,
-                ZipCode = org.RUC,
+                ZipCode = org.ZipCode,
             };
         }
 

@@ -45,8 +45,15 @@ namespace License_API.Controllers
                 ZipCode= noDTO.ZipCode,
             };
 
-            repo.CreateOrg(org);
-            return CreatedAtAction(nameof(GetOrg), new { id = org.OrgID }, org.AsDTO());
+            if (repo.CreateOrg(org))
+            {
+                return CreatedAtAction(nameof(GetOrg), new { id = org.OrgID }, org.AsDTO());
+            }
+            else
+            {
+                return BadRequest();
+            }
+            
         }
 
         // GET /Organizations/{id}/Licenses

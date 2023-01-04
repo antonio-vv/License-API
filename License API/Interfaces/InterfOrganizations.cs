@@ -6,6 +6,6 @@ namespace License_API.Interfaces
     {
         Organizations GetOrg(string id);
 
-        void CreateOrg(Organizations org);
+        bool CreateOrg(Organizations org);
     }
 }

@@ -8,22 +8,22 @@ namespace License_API.Interfaces
 
         IEnumerable<Licenses> GetOrgLics(string org_id);
 
-        void CreateKey(Licenses licenseKey);
+        bool CreateKey(Licenses licenseKey);
 
-        void UpgradeKey(Licenses licenseKey);
+        bool UpgradeKey(Licenses licenseKey);
 
-        void RenewKey(Licenses licenseKey);
+        bool RenewKey(Licenses licenseKey);
 
-        void CreateCount(Licenses licenseKey);
+        bool CreateCount(Licenses licenseKey);
         
-        void UpdateCount(Licenses licenseKey);
+        bool UpdateCount(Licenses licenseKey);
 
-        void AddCount(Licenses licenseKey);
+        bool AddCount(Licenses licenseKey);
 
-        void DeleteCount(Licenses licenseKey);
+        bool DeleteCount(Licenses licenseKey);
 
-        void BindServer(Licenses licenseKey);
+        bool BindServer(Licenses licenseKey);
 
-        void UnbindServer(Licenses licenseKey);
+        bool UnbindServer(Licenses licenseKey);
     }
 }

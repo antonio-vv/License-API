@@ -15,12 +15,20 @@ namespace License_API.Repos
             mySQLConn = conn;
         }
 
-        public void CreateOrg(Organizations org)
+        public bool CreateOrg(Organizations org)
         {
             string query = "INSERT INTO organization VALUES('" + org.OrgID.ToString().Trim() + "', '" + org.Organization.Trim() + "', '" +
                 org.RUC.Trim() + "', '" + org.ZipCode.Trim() + "');";
             MySqlCommand cmm = new(query, mySQLConn);
-            cmm.ExecuteNonQuery();
+            try
+            {
+                cmm.ExecuteNonQuery();
+                return true;
+            }
+            catch(MySqlException ex)
+            {
+                return false;
+            }
         }
 
         public Organizations GetOrg(string id)
@@ -29,14 +37,20 @@ namespace License_API.Repos
             MySqlDataAdapter adp = new(query, mySQLConn);
             DataTable dt = new();
             adp.Fill(dt);
-
-            return new Organizations
+            try
             {
-                OrgID = dt.Rows[0][0].ToString().Trim(),
-                Organization = dt.Rows[0][1].ToString().Trim(),
-                RUC = dt.Rows[0][2].ToString().Trim(),
-                ZipCode = dt.Rows[0][3].ToString().Trim(),
-            };
+                return new Organizations
+                {
+                    OrgID = dt.Rows[0][0].ToString().Trim(),
+                    Organization = dt.Rows[0][1].ToString().Trim(),
+                    RUC = dt.Rows[0][2].ToString().Trim(),
+                    ZipCode = dt.Rows[0][3].ToString().Trim(),
+                };
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

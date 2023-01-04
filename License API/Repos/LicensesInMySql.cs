@@ -14,7 +14,7 @@ namespace License_API.Repos
             mySQLConn = conn;
         }
         
-        public void CreateKey(Licenses licenseKey)
+        public bool CreateKey(Licenses licenseKey)
         {
             string query = "INSERT INTO license VALUES('" + licenseKey.Key.ToString().Trim() + "', '" +
                 licenseKey.Creation.DateTime.ToString("yyyy-MM-dd HH:mm:ss") + "', '" + licenseKey.Category.Trim() + "', '" +
@@ -28,31 +28,47 @@ namespace License_API.Repos
             {
                 query = query + ", '" + licenseKey.Server.Trim() + "', '" + licenseKey.Org_ID.Trim() + "');";
             }
+            
             MySqlCommand cmm = new(query, mySQLConn);
-            cmm.ExecuteNonQuery();
+            try
+            {
+                cmm.ExecuteNonQuery();
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
         }
 
         public Licenses GetKey(Guid id)
         {
-            string query = "SELECT * FROM license WHERE key = '" + id.ToString() + "' ;";
+            string query = "SELECT * FROM license WHERE KEY = '" + id.ToString() + "' ;";
             MySqlCommand cmm = new(query, mySQLConn);
             MySqlDataAdapter adp = new(cmm);
             DataTable dt = new();
             adp.Fill(dt);
 
-            return new Licenses
+            try
             {
-                Key = new Guid(dt.Rows[0][0].ToString().Trim()),
-                Creation = Convert.ToDateTime(dt.Rows[0][1].ToString()),
-                Category = dt.Rows[0][2].ToString(),
-                Expiration = Convert.ToDateTime(dt.Rows[0][3].ToString()),
-                CreateOps = Convert.ToInt32(dt.Rows[0][4].ToString()),
-                UpdateOps = Convert.ToInt32(dt.Rows[0][5].ToString()),
-                AddOps = Convert.ToInt32(dt.Rows[0][6].ToString()),
-                DeleteOps = Convert.ToInt32(dt.Rows[0][7].ToString()),
-                Server = dt.Rows[0][8].ToString(),
-                Org_ID = dt.Rows[0][9].ToString()
-            };
+                return new Licenses
+                {
+                    Key = new Guid(dt.Rows[0][0].ToString().Trim()),
+                    Creation = Convert.ToDateTime(dt.Rows[0][1].ToString()),
+                    Category = dt.Rows[0][2].ToString(),
+                    Expiration = Convert.ToDateTime(dt.Rows[0][3].ToString()),
+                    CreateOps = Convert.ToInt32(dt.Rows[0][4].ToString()),
+                    UpdateOps = Convert.ToInt32(dt.Rows[0][5].ToString()),
+                    AddOps = Convert.ToInt32(dt.Rows[0][6].ToString()),
+                    DeleteOps = Convert.ToInt32(dt.Rows[0][7].ToString()),
+                    Server = dt.Rows[0][8].ToString(),
+                    Org_ID = dt.Rows[0][9].ToString()
+                };
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }            
         }
 
         public IEnumerable<Licenses> GetOrgLics(string org_id)
@@ -61,86 +77,155 @@ namespace License_API.Repos
             MySqlCommand cmm = new(query, mySQLConn);
             MySqlDataAdapter adp = new(cmm);
             DataTable dt = new();
-            adp.Fill(dt);
-
             var lics = new List<Licenses>();
-
-            for (int i = 0; i < dt.Rows.Count; i++)
+            try
             {
-                var lic = new Licenses()
+                adp.Fill(dt);
+                for (int i = 0; i < dt.Rows.Count; i++)
                 {
-                    Key = new Guid(dt.Rows[i][0].ToString()),
-                    Creation = Convert.ToDateTime(dt.Rows[i][1].ToString()),
-                    Category = dt.Rows[i][2].ToString(),
-                    Expiration = Convert.ToDateTime(dt.Rows[i][3].ToString()),
-                    CreateOps = Convert.ToInt32(dt.Rows[i][4].ToString()),
-                    UpdateOps = Convert.ToInt32(dt.Rows[i][5].ToString()),
-                    AddOps = Convert.ToInt32(dt.Rows[i][6].ToString()),
-                    DeleteOps = Convert.ToInt32(dt.Rows[i][7].ToString()),
-                    Server = dt.Rows[i][8].ToString(),
-                    Org_ID = dt.Rows[i][9].ToString()
-                };
-                lics.Add(lic);
-            }
+                    var lic = new Licenses()
+                    {
+                        Key = new Guid(dt.Rows[i][0].ToString()),
+                        Creation = Convert.ToDateTime(dt.Rows[i][1].ToString()),
+                        Category = dt.Rows[i][2].ToString(),
+                        Expiration = Convert.ToDateTime(dt.Rows[i][3].ToString()),
+                        CreateOps = Convert.ToInt32(dt.Rows[i][4].ToString()),
+                        UpdateOps = Convert.ToInt32(dt.Rows[i][5].ToString()),
+                        AddOps = Convert.ToInt32(dt.Rows[i][6].ToString()),
+                        DeleteOps = Convert.ToInt32(dt.Rows[i][7].ToString()),
+                        Server = dt.Rows[i][8].ToString(),
+                        Org_ID = dt.Rows[i][9].ToString()
+                    };
+                    lics.Add(lic);
+                }
 
-            return lics;
+                return lics;
+            }
+            catch (MySqlException ex)
+            {
+                return lics;
+            }
         }
 
-        public void UpgradeKey(Licenses licenseKey)
+        public bool UpgradeKey(Licenses licenseKey)
         {
             string query = "UPDATE license SET category = '" + licenseKey.Category.Trim() + "' WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
-            cmm.ExecuteNonQuery();
+            try
+            {
+                cmm.ExecuteNonQuery();
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
         }
 
-        public void RenewKey(Licenses licenseKey)
+        public bool RenewKey(Licenses licenseKey)
         {
             string query = "UPDATE license SET expiration = '" + licenseKey.Expiration.DateTime.ToString("yyyy-MM-dd HH:mm:ss") + 
                 "' WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
-            cmm.ExecuteNonQuery();
+            try
+            {
+                cmm.ExecuteNonQuery();
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
         }
 
-        public void CreateCount(Licenses licenseKey)
+        public bool CreateCount(Licenses licenseKey)
         {
             string query = "UPDATE license SET createOps = createOps - 1 WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
-            cmm.ExecuteNonQuery();
+            try
+            {
+                cmm.ExecuteNonQuery();
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
         }
 
-        public void UpdateCount(Licenses licenseKey)
+        public bool UpdateCount(Licenses licenseKey)
         {
             string query = "UPDATE license SET updateOps = updateOps - 1 WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
-            cmm.ExecuteNonQuery();
+            try
+            {
+                cmm.ExecuteNonQuery();
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
         }
 
-        public void AddCount(Licenses licenseKey)
+        public bool AddCount(Licenses licenseKey)
         {
             string query = "UPDATE license SET addOps = addOps - 1 WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
-            cmm.ExecuteNonQuery();
+            try
+            {
+                cmm.ExecuteNonQuery();
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
         }
 
-        public void DeleteCount(Licenses licenseKey)
+        public bool DeleteCount(Licenses licenseKey)
         {
             string query = "UPDATE license SET deleteOps = deleteOps - 1 WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
-            cmm.ExecuteNonQuery();
+            try
+            {
+                cmm.ExecuteNonQuery();
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
         }
 
-        public void BindServer(Licenses licenseKey)
+        public bool BindServer(Licenses licenseKey)
         {
             string query = "UPDATE license SET server = '" + licenseKey.Server.Trim() + "' WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
-            cmm.ExecuteNonQuery();
+            try
+            {
+                cmm.ExecuteNonQuery();
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
         }
 
-        public void UnbindServer(Licenses licenseKey)
+        public bool UnbindServer(Licenses licenseKey)
         {
             string query = "UPDATE license SET server = NULL WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
-            cmm.ExecuteNonQuery();
+            try
+            {
+                cmm.ExecuteNonQuery();
+                return true;
+            }
+            catch (MySqlException ex)
+            {
+                return false;
+            }
         }
     }
 }
