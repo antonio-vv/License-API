@@ -7,6 +7,7 @@ namespace License_API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Produces("application/json")]
     public class CategoryController : Controller
     {
         private readonly InterfCategories repo;
@@ -18,10 +19,10 @@ namespace License_API.Controllers
 
         // GET /Category
         [HttpGet]
-        public IEnumerable<Categories> GetCats()
+        public object GetCats()
         {
             var cats = repo.GetCats();
-            return cats;
+            return new {Categories = cats.OrderBy(c => c.Creations)};
         }
 
         // GET /Category/{name}

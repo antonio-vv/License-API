@@ -7,6 +7,7 @@ namespace License_API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Produces("application/json")]
     public class LicenseController : Controller
     {
         private readonly InterfLicenses repo;

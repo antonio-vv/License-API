@@ -43,7 +43,7 @@ namespace License_API.Repos
 
         public Licenses GetKey(Guid id)
         {
-            string query = "SELECT * FROM license WHERE KEY = '" + id.ToString() + "' ;";
+            string query = "SELECT * FROM license WHERE lickey = '" + id.ToString() + "' ;";
             MySqlCommand cmm = new(query, mySQLConn);
             MySqlDataAdapter adp = new(cmm);
             DataTable dt = new();
@@ -109,7 +109,7 @@ namespace License_API.Repos
 
         public bool UpgradeKey(Licenses licenseKey)
         {
-            string query = "UPDATE license SET category = '" + licenseKey.Category.Trim() + "' WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
+            string query = "UPDATE license SET category = '" + licenseKey.Category.Trim() + "' WHERE lickey = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
             try
             {
@@ -124,8 +124,8 @@ namespace License_API.Repos
 
         public bool RenewKey(Licenses licenseKey)
         {
-            string query = "UPDATE license SET expiration = '" + licenseKey.Expiration.DateTime.ToString("yyyy-MM-dd HH:mm:ss") + 
-                "' WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
+            string query = "UPDATE license SET expiration = '" + licenseKey.Expiration.DateTime.ToString("yyyy-MM-dd HH:mm:ss") +
+                "' WHERE lickey = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
             try
             {
@@ -140,7 +140,7 @@ namespace License_API.Repos
 
         public bool CreateCount(Licenses licenseKey)
         {
-            string query = "UPDATE license SET createOps = createOps - 1 WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
+            string query = "UPDATE license SET createOps = createOps - 1 WHERE lickey = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
             try
             {
@@ -155,7 +155,7 @@ namespace License_API.Repos
 
         public bool UpdateCount(Licenses licenseKey)
         {
-            string query = "UPDATE license SET updateOps = updateOps - 1 WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
+            string query = "UPDATE license SET updateOps = updateOps - 1 WHERE lickey = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
             try
             {
@@ -170,7 +170,7 @@ namespace License_API.Repos
 
         public bool AddCount(Licenses licenseKey)
         {
-            string query = "UPDATE license SET addOps = addOps - 1 WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
+            string query = "UPDATE license SET addOps = addOps - 1 WHERE lickey = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
             try
             {
@@ -185,7 +185,7 @@ namespace License_API.Repos
 
         public bool DeleteCount(Licenses licenseKey)
         {
-            string query = "UPDATE license SET deleteOps = deleteOps - 1 WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
+            string query = "UPDATE license SET deleteOps = deleteOps - 1 WHERE lickey = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
             try
             {
@@ -200,7 +200,7 @@ namespace License_API.Repos
 
         public bool BindServer(Licenses licenseKey)
         {
-            string query = "UPDATE license SET server = '" + licenseKey.Server.Trim() + "' WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
+            string query = "UPDATE license SET server = '" + licenseKey.Server.Trim() + "' WHERE lickey = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
             try
             {
@@ -215,7 +215,7 @@ namespace License_API.Repos
 
         public bool UnbindServer(Licenses licenseKey)
         {
-            string query = "UPDATE license SET server = NULL WHERE key = '" + licenseKey.Key.ToString().Trim() + "';";
+            string query = "UPDATE license SET server = NULL WHERE lickey = '" + licenseKey.Key.ToString().Trim() + "';";
             MySqlCommand cmm = new(query, mySQLConn);
             try
             {

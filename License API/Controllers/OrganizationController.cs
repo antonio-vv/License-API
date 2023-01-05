@@ -7,6 +7,7 @@ namespace License_API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Produces("application/json")]
     public class OrganizationController : Controller
     {
         private readonly InterfOrganizations repo;
@@ -58,10 +59,10 @@ namespace License_API.Controllers
 
         // GET /Organizations/{id}/Licenses
         [HttpGet("{id}/Licenses")]
-        public IEnumerable<Licenses> GetOrgLics(string id)
+        public object GetOrgLics(string id)
         {
             var lics = repoLic.GetOrgLics(id);
-            return lics;
+            return new {Licenses = lics.OrderBy(c => c.Creation)};
         }
     }
 }
